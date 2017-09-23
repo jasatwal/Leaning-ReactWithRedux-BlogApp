@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchPost } from "../actions";
+import { Link } from "react-router-dom";
+import { fetchPost, deletePost } from "../actions";
 
 class PostsShow extends Component {
     componentDidMount() {
         const { id } = this.props.match.params;
-        this.props.fetchPost(id);
+
+        // If you're not worries about stale data.
+        //if (!this.props.post) {
+            this.props.fetchPost(id);
+        //}
     }
 
     render() {
@@ -17,11 +22,22 @@ class PostsShow extends Component {
 
         return (
             <div>
+                <Link to="/">Back To Index</Link>
+                <button
+                    className="btn btn-danger pull-xs-right"
+                    onClick={this.onDeleteClick}>Delete Post</button>
                 <h3>{post.title}</h3>
                 <h6>Categories: {post.categories}</h6>
                 <p>{post.content}</p>
             </div>
         );
+    }
+
+    onDeleteClick = () => {
+        const { id } = this.props.match.params;
+        this.props.deletePost(id, () => {
+            this.props.history.push("/");
+        });
     }
 }
 
@@ -34,4 +50,4 @@ function mapStateToProps({ posts }, ownProps) {
     }
 }
 
-export default connect(mapStateToProps, { fetchPost })(PostsShow);
+export default connect(mapStateToProps, { fetchPost, deletePost })(PostsShow);
