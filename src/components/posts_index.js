@@ -40,4 +40,8 @@ function mapStateToProps({ posts }) {
     return { posts }
 }
 
+// The second argument can be written as:
+// function mapDispatchToProps(dispatch) {
+//     return { fetchPosts: fetchPosts }
+// }
 export default connect(mapStateToProps, { fetchPosts })(PostsIndex);
